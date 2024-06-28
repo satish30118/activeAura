@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import React, { useEffect } from "react";
 
 const Splash = ({ navigation }) => {
@@ -16,6 +16,7 @@ const Splash = ({ navigation }) => {
         justifyContent: "center",
       }}
     >
+      <Image source={require("../assets/img/logo.png")}/>
       <Text style={{ fontSize: 30, fontWeight: 800 }}>
         <Text style={{ color: "white" }}>
           Active <Text style={{ color: "red" }}>Aura</Text>
