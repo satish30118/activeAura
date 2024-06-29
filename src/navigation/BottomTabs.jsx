@@ -17,6 +17,7 @@ const BottomTabs = () => {
         name="Home"
         component={Home}
         options={{
+          headerShown: false,
           tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
             <Icon name="home" size={size} color={color} />
@@ -27,6 +28,7 @@ const BottomTabs = () => {
         name="Post"
         component={NewPost}
         options={{
+          headerShown: false,
           tabBarLabel: "New Post",
           tabBarIcon: ({ color, size }) => (
             <Icon name="upload" size={size} color={color} />
@@ -37,6 +39,7 @@ const BottomTabs = () => {
         name="Message"
         component={Message}
         options={{
+          headerShown: false,
           tabBarLabel: "Message",
           tabBarIcon: ({ color, size }) => (
             <Icon name="group" size={size} color={color} />
