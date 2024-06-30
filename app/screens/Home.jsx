@@ -12,6 +12,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { APP_API } from "@env";
 import axios from "axios";
 import PostCard from "../compenents/PostCard";
+import { auth } from "../contexts/Firebase";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -28,6 +29,17 @@ const Home = () => {
   useEffect(() => {
     getPost();
   }, []);
+  const signIn = async (email, password) => {
+    try {
+      const userCredential = await auth().signInWithEmailAndPassword(
+        email,
+        password
+      );
+      console.log(userCredential.user);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={style.container}>
       <View style={style.header}>
@@ -38,7 +50,7 @@ const Home = () => {
         </TouchableOpacity>
         <Text style={style.headerText}>Public Posts</Text>
       </View>
-      <ScrollView style={style.homePage}>
+      {/* <ScrollView style={style.homePage}>
         <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
@@ -47,7 +59,7 @@ const Home = () => {
         )}
       />
         <PostCard />
-      </ScrollView>
+      </ScrollView> */}
     </View>
   );
 };
