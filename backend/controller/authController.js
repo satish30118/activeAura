@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const Register = async (req, res) => {
-  const { mobile, password } = req.body;
+  const { name, mobile, password } = req.body;
 
   try {
     // Check if user already exists
@@ -15,7 +15,7 @@ const Register = async (req, res) => {
     }
 
     // Create new user
-    const newUser = new User({ mobile, password });
+    const newUser = new User({ name, mobile, password });
     await newUser.save();
 
     res
@@ -36,7 +36,7 @@ const Login = async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .json({ success: false, message: "User not found" });
+        .json({ success: false, message: "Invalid credentials" });
     }
 
     // Compare passwords

@@ -1,8 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Home from "../screens/Home";
-import NewPost from "../screens/NewPost";
-import Message from "../screens/Message";
+import AddFriends from "../screens/AddFriends";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,22 +24,11 @@ const BottomTabs = () => {
         }}
       />
       <Tab.Screen
-        name="Post"
-        component={NewPost}
+        name="AddFriends"
+        component={AddFriends}
         options={{
           headerShown: false,
-          tabBarLabel: "New Post",
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="upload" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Message"
-        component={Message}
-        options={{
-          headerShown: false,
-          tabBarLabel: "Message",
+          tabBarLabel: "Add Friends",
           tabBarIcon: ({ color, size }) => (
             <Icon name="group" size={size} color={color} />
           ),

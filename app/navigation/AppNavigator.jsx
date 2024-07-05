@@ -3,6 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MainScreen from "../Layout/MainScreen";
 import Splash from "../Layout/Splash";
+import Login from "../screens/Login";
+import Register from "../screens/Register";
 
 const Stack = createStackNavigator();
 
@@ -11,13 +13,23 @@ const AppNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="splash"
+          name="Splash"
           component={Splash}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="main"
+          name="Main"
           component={MainScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

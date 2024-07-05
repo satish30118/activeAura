@@ -7,7 +7,7 @@ const AppDrawer = () => {
   return (
     <Drawer.Navigator>
       <Drawer.Screen
-        name="homescreen"
+        name="HomeScreen"
         component={HomeScreen}
         options={{ headerShown: false }}
       />

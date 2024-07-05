@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TextInput, FlatList } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
 
-const Message = () => {
+const AddFriends = () => {
   const [users, setUsers] = useState([]);
   const getUsers = async (e) => {
     try {
@@ -49,4 +49,4 @@ const style = StyleSheet.create({
     marginBottom: 20,
   },
 });
-export default Message;
+export default AddFriends;
