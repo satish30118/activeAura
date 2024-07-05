@@ -11,6 +11,7 @@ import axios from "axios";
 
 const Register = ({ navigation }) => {
   const [mobile, setMobile] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,21 +19,20 @@ const Register = ({ navigation }) => {
   const sendData = async () => {
     try {
       if (!password || !mobile) {
-        return alert(`Mobile Number and Password Required.`);
+        return alert(`Name, Mobile Number and Password Required.`);
       }
       if (password !== cpassword) {
         return alert(`Password and Confirm Password not matched.`);
       }
       setLoading(true);
-      const { data } = await axios.post(
-        `http://192.168.43.38/api/v1/auth/register`,
-        {
-          password,
-          mobile,
-        }
-      );
+      const { data } = await axios.post(`/api/v1/auth/register`, {
+        password,
+        mobile,
+        name
+      });
       setLoading(false);
       alert(data.message);
+      console.log(data)
     } catch (error) {
       console.log(error.message);
       setLoading(false);
@@ -44,6 +44,13 @@ const Register = ({ navigation }) => {
       <Text style={style.header}>
         Create <Text style={{ color: "red" }}>Account</Text>
       </Text>
+      <TextInput
+        placeholder="Enter Name"
+        style={style.textInput}
+        keyboardType="text"
+        placeholderTextColor={"lightgrey"}
+        onChangeText={setName}
+      />
       <TextInput
         placeholder="Enter Mobile No."
         style={style.textInput}

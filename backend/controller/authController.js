@@ -17,10 +17,24 @@ const Register = async (req, res) => {
     // Create new user
     const newUser = new User({ name, mobile, password });
     await newUser.save();
+    const payload = {
+      user: {
+        id: newUser.id,
+        mobile: newUser.mobile,
+      },
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "365d",
+    });
 
     res
       .status(201)
-      .json({ success: true, message: "User registered successfully" });
+      .json({
+        success: true,
+        message: "User registered successfully",
+        token,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
