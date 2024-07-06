@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const Authorization = async (req, res, next) => {
   try {
     const token = req.headers["Authorization"];
+    console.log(token)
     const secretkey = process.env.JWT_SECRET;
     if (!token) {
       return console.log("No Token");

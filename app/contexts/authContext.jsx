@@ -8,19 +8,19 @@ const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({ token: "myself token" });
 
   // DEFAULTS HEADERs
-  axios.defaults.headers.common["Authorization"] = auth;
+  axios.defaults.headers.common["Authorization"] = auth?.token;
   axios.defaults.baseURL = APP_API;
 
   useEffect(() => {
     const loadToken = async () => {
-      try {
-        const userData = await SecureStore.getItemAsync("authToken");
-        if (userData) {
-          setAuth(userData);
-        }
-      } catch (error) {
-        console.error("Failed to load the token", error);
-      }
+    //   try {
+    //     const userData = await SecureStore.getItemAsync("authToken");
+    //     if (userData) {
+    //       setAuth(userData);
+    //     }
+    //   } catch (error) {
+    //     console.error("Failed to load the token", error);
+    //   }
     };
     loadToken();
   }, [auth?.token]);
