@@ -4,11 +4,16 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+import { useAuth } from "../contexts/authContext";
 
 const Login = ({ navigation }) => {
+  const [setAuth] = useAuth();
+  const [loading, setLoading] = useState(false);
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,13 +22,22 @@ const Login = ({ navigation }) => {
       if (!password || !mobile) {
         return alert(`Mobile Number and Password Required.`);
       }
+      setLoading(true);
       const { data } = await axios.post(`api/v1/auth/login`, {
         password,
         mobile,
       });
 
+      setLoading(false);
       alert(data.message);
+
+      if (data?.success) {
+        navigation.navigate("MainScreen");
+        await SecureStore.getItemAsync("authToken", data?.token);
+        setAuth({ ...auth, token: data?.token });
+      }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -48,7 +62,9 @@ const Login = ({ navigation }) => {
         onChangeText={setPassword}
       />
       <TouchableOpacity style={style.button} onPress={sendData}>
-        <Text style={style.buttonText}>Login</Text>
+        <Text style={style.buttonText}>
+          {loading ? <ActivityIndicator size={"large"} /> : "Login"}
+        </Text>
       </TouchableOpacity>
 
       <View style={{ justifyContent: "center", marginVertical: 20 }}>

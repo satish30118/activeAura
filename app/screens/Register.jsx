@@ -8,8 +8,11 @@ import {
   ActivityIndicator,
 } from "react-native";
 import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+import { useAuth } from "../contexts/authContext";
 
 const Register = ({ navigation }) => {
+  const [setAuth] = useAuth();
   const [mobile, setMobile] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -28,11 +31,13 @@ const Register = ({ navigation }) => {
       const { data } = await axios.post(`/api/v1/auth/register`, {
         password,
         mobile,
-        name
+        name,
       });
       setLoading(false);
       alert(data.message);
-      console.log(data)
+      // console.log(data)
+      await SecureStore.getItemAsync("authToken", data?.token);
+      setAuth({ "token": data?.token });
     } catch (error) {
       console.log(error.message);
       setLoading(false);
