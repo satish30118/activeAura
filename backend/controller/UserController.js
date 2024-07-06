@@ -2,7 +2,7 @@ const { findOne } = require("../model/UserModel");
 
 const getProfile = async (req, res) => {
   try {
-    const user = await findOneById(req?.user?.id);
+    const user = await findById(req?.user?.id);
     res
       .status(200)
       .send({ success: true, message: "User Found", details: user });

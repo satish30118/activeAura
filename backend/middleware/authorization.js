@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const Authorization = async (req, res, next) => {
   try {
     const token = req.headers["authorization"];
-    console.log(token);
     const secretkey = process.env.JWT_SECRET;
     if (!token) {
       return res.status(401).json({ message: "No token provided" });
@@ -15,8 +14,8 @@ const Authorization = async (req, res, next) => {
     if (!decodedUser) {
       return res.status(401).json({ message: "User not decoded" });
     }
-    req.user = decodedUser;
-    console.log(decodedUser);
+    req.user = decodedUser?.user;
+    // console.log(decodedUser);
     next();
   } catch (error) {
     console.log(error);
