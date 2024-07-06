@@ -2,16 +2,13 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
-import {APP_API} from '@env'
+import { APP_API } from "@env";
 
 const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({
-    user: null,
-    token: "",
-  });
+  const [auth, setAuth] = useState({ token: "myself token" });
 
   // DEFAULTS HEADERs
-  axios.defaults.headers.common["Authorization"] = auth?.token;
+  axios.defaults.headers.common["Authorization"] = auth;
   axios.defaults.baseURL = APP_API;
 
   useEffect(() => {

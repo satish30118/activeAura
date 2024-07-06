@@ -12,7 +12,7 @@ import * as SecureStore from "expo-secure-store";
 import { useAuth } from "../contexts/authContext";
 
 const Register = ({ navigation }) => {
-  const [setAuth] = useAuth();
+  const [auth, setAuth] = useAuth();
   const [mobile, setMobile] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +37,7 @@ const Register = ({ navigation }) => {
       alert(data.message);
       // console.log(data)
       await SecureStore.getItemAsync("authToken", data?.token);
-      setAuth({ "token": data?.token });
+      setAuth({ ...auth, token: data?.token });
     } catch (error) {
       console.log(error.message);
       setLoading(false);

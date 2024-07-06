@@ -12,7 +12,7 @@ import * as SecureStore from "expo-secure-store";
 import { useAuth } from "../contexts/authContext";
 
 const Login = ({ navigation }) => {
-  const [setAuth] = useAuth();
+  const [auth, setAuth] = useAuth();
   const [loading, setLoading] = useState(false);
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
@@ -33,8 +33,12 @@ const Login = ({ navigation }) => {
 
       if (data?.success) {
         navigation.navigate("MainScreen");
-        await SecureStore.getItemAsync("authToken", data?.token);
-        setAuth({ ...auth, token: data?.token });
+
+        // await SecureStore.getItemAsync(
+        //   "authToken",
+        //   JSON.stringify(data?.token)
+        // );
+        setAuth({...auth, "token": data?.token });
       }
     } catch (error) {
       setLoading(false);

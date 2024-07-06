@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
+import axios from "axios";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -19,7 +20,6 @@ const Home = () => {
       setLoading(true);
       const { data } = await axios.get(`/api/v1/user/get-friends`);
       setLoading(false);
-
       console.log(data);
     } catch (error) {
       console.log(error.message);
@@ -60,15 +60,15 @@ const Home = () => {
 const style = StyleSheet.create({
   container: {
     marginTop: 26,
-    backgroundColor: "lightgray",
+    backgroundColor: "white",
     flex: 1,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    // backgroundColor: "white",
+    backgroundColor: "white",
     padding: 10,
-    borderBottomColor: "blue",
+    borderBottomColor: "lightgray",
     borderBottomWidth: 1,
   },
   headerText: {
