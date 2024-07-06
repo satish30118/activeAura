@@ -20,7 +20,7 @@ const Home = () => {
       setLoading(true);
       const { data } = await axios.get(`/api/v1/user/get-friends`);
       setLoading(false);
-      alert(data?.message)
+      alert(data?.message);
       console.log(data);
     } catch (error) {
       console.log(error.message);

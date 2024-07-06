@@ -1,16 +1,17 @@
 const User = require("../model/UserModel");
 
-const getProfile = async (req, res) => {
+const getFriends = async (req, res) => {
   try {
     const user = await User.findById(req?.user?.id);
     res
       .status(200)
-      .send({ success: true, message: "User Found", details: user });
+      .send({ success: true, message: "User Found", details: user?.friends });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 const addFriend = async (req, res) => {
   try {
@@ -26,4 +27,4 @@ const addFriend = async (req, res) => {
   }
 };
 
-module.exports = { getProfile, addFriend };
+module.exports = { getFriends, addFriend };
