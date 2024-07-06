@@ -20,7 +20,7 @@ const Login = ({ navigation }) => {
   const sendData = async () => {
     try {
       if (!password || !mobile) {
-        return alert(`Mobile Number and Password Required.`);
+        return alert("Mobile Number and Password Required.");
       }
       setLoading(true);
       const { data } = await axios.post(`api/v1/auth/login`, {
@@ -34,11 +34,9 @@ const Login = ({ navigation }) => {
       if (data?.success) {
         navigation.navigate("MainScreen");
 
-        // await SecureStore.getItemAsync(
-        //   "authToken",
-        //   JSON.stringify(data?.token)
-        // );
-        setAuth({...auth, "token": data?.token });
+        // Store token securely
+        await SecureStore.setItemAsync("authToken", data?.token);
+        setAuth({ ...auth, token: data?.token });
       }
     } catch (error) {
       setLoading(false);

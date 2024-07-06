@@ -2,24 +2,25 @@ const jwt = require("jsonwebtoken");
 
 const Authorization = async (req, res, next) => {
   try {
-    const token = req.headers["Authorization"];
-    console.log(token)
+    const token = req.headers["authorization"];
+    console.log(token);
     const secretkey = process.env.JWT_SECRET;
     if (!token) {
-      return console.log("No Token");
+      return res.status(401).json({ message: "No token provided" });
     }
     if (!secretkey) {
-      return console.log("No Secret key");
+      return res.status(500).json({ message: "No secret key provided" });
     }
-    const decodedUser = jwt.verify(token, secretkey);
+    const decodedUser = jwt.verify(token.split(" ")[1], secretkey); // Split to remove "Bearer"
     if (!decodedUser) {
-      return console.log("User not decoded");
+      return res.status(401).json({ message: "User not decoded" });
     }
     req.user = decodedUser;
     console.log(decodedUser);
     next();
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Failed to authenticate token" });
   }
 };
 
