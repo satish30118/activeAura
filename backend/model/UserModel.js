@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6, // Example: minimum password length
   },
+  friends: {
+    type: Array,
+    default: [],
+  },
 });
 
 // Hash password before saving to database
