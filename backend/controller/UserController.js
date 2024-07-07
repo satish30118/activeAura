@@ -28,7 +28,7 @@ const addFriend = async (req, res) => {
 
 const searchUsers = async (req, res) => {
   try {
-    const { query } = req.param;
+    const { query } = req.params;
     const user = await User.aggregate([
       {
         $search: {
@@ -39,7 +39,12 @@ const searchUsers = async (req, res) => {
           },
         },
       },
-    ]).toArray();
+      {
+        $project: {
+          name: 1,
+        },
+      },
+    ]);
 
     res
       .status(200)
