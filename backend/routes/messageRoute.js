@@ -1,7 +1,8 @@
 const { SendMessage, getMessage } = require("../controller/messageConroller");
+const Authorization = require("../middleware/authorization");
 const router = require("express").Router();
 
-router.route("/send-message").post(SendMessage);
-router.route("/get-message/:senderId/:receiverId").get(getMessage);
+router.route("/send-message").post(Authorization, SendMessage);
+router.route("/get-message/:receiverId").get(Authorization, getMessage);
 
 module.exports = router;

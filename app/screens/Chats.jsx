@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { APP_API } from "@env";
 import {
   View,
   Text,
@@ -11,48 +12,49 @@ import {
 } from "react-native";
 import io from "socket.io-client";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { useAuth } from "../contexts/authContext";
+import axios from "axios";
 
-const socket = io("YOUR_SOCKET_SERVER_URL");
+const socket = io(APP_API);
 
 const Chats = ({ navigation, route }) => {
+  const [auth] =useAuth()
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
   const { name, id } = route.params;
 
   useEffect(() => {
     fetchChats();
-
-    // Listen for new messages from socket server
     socket.on("receiveMessage", (newMessage) => {
       setChats((prevChats) => [...prevChats, newMessage]);
     });
 
     return () => {
-      socket.disconnect(); // Clean up socket connection
+      socket.disconnect(); 
     };
   }, []);
 
-  const fetchChats = () => {
-    // Replace with actual API call to fetch chats from backend
-    const fakeChats = [
-      { id: 1, sender: "user", message: "Hello there!" },
-      { id: 2, sender: "other", message: "Hi, how are you?" },
-      { id: 3, sender: "user", message: "I'm good, thanks!" },
-    ];
-    setChats(fakeChats);
+  const fetchChats = async () => {
+    try {
+      const { data } = await axios.get(`/api/v1/message/get-message/${id}`);
+      setChats(data.details);
+      console.log(data)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const sendMessage = () => {
     if (message.trim() === "") return;
 
     // Emit message to socket server
-    socket.emit("sendMessage", { receiverId: id, content: message });
+    socket.emit("sendMessage", {senderId : auth?.user?._id, receiverId : id, content : message });
 
-    // Update local UI
-    setChats((prevChats) => [
-      ...prevChats,
-      { id: prevChats.length + 1, sender: "user", message },
-    ]);
+    // // Update local UI
+    // setChats((prevChats) => [
+    //   ...prevChats,
+    //   { id: prevChats.length + 1, sender: "user", message },
+    // ]);
     setMessage("");
   };
 
@@ -61,8 +63,8 @@ const Chats = ({ navigation, route }) => {
       style={[
         styles.chatBubble,
         {
-          alignSelf: item.sender === "user" ? "flex-end" : "flex-start",
-          backgroundColor: item.sender === "user" ? "#b2e5ff" : "#e5e5e5",
+          alignSelf: item.senderId === auth?.user?._id ? "flex-end" : "flex-start",
+          backgroundColor: item.senderId === auth?.user?._id  ? "#b2e5ff" : "#e5e5e5",
         },
       ]}
     >
