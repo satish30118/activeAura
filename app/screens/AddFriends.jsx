@@ -37,7 +37,7 @@ const AddFriends = ({ navigation }) => {
         friendName: name,
         friendId: id,
       });
-      console.log(data)
+      // console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -46,9 +46,9 @@ const AddFriends = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
-          <Text>
-            <Icon name="user" size={23} />
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Text style={{ marginLeft: 10 }}>
+            <Icon name="bars" size={23} />
           </Text>
         </TouchableOpacity>
         <Text style={styles.headerText}>

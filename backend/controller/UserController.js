@@ -20,7 +20,6 @@ const addFriend = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Friend Added Successfully",
-      details: user,
     });
     user.save();
   } catch (error) {

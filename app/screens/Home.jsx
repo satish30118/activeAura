@@ -20,8 +20,7 @@ const Home = ({ navigation }) => {
       setLoading(true);
       const { data } = await axios.get(`/api/v1/user/get-friends`);
       setLoading(false);
-      // alert(data?.message);
-      console.log(data);
+      setFriends(data?.details);
     } catch (error) {
       console.log(error.message);
       setLoading(false);
@@ -35,7 +34,7 @@ const Home = ({ navigation }) => {
   return (
     <View style={style.container}>
       <View style={style.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Text style={{ marginLeft: 10 }}>
             <Icon name="bars" size={24} />
           </Text>
@@ -44,21 +43,38 @@ const Home = ({ navigation }) => {
           Active <Text style={{ color: "red" }}>Aura</Text>{" "}
         </Text>
       </View>
-      <ScrollView style={style.homePage}>
-        {/* <FlatList
-        data={posts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <PostCard data={item} />
-        )}
-      />
-        <PostCard /> */}
-        <TouchableOpacity onPress={() => navigation.navigate("ChatScreen")}>
-          <View style={style.friend_card}>
-            <Text style={style.friend_card_text}>Satish</Text>
+      <View style={style.homePage}>
+        {loading ? (
+          <View style={style.centered}>
+            <ActivityIndicator size={"large"} />
           </View>
-        </TouchableOpacity>
-      </ScrollView>
+        ) : friends.length === 0 ? (
+          <View style={style.centered}>
+            <Text style={{ fontSize: 18, fontWeight: "900" }}>
+              No Friend Found, Add Friends
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={friends}
+            keyExtractor={(item) => item.friendId}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("ChatScreen", {
+                    name: item?.friendName,
+                    id: item.friendId,
+                  })
+                }
+              >
+                <View style={style.friend_card}>
+                  <Text style={style.friend_card_text}>{item?.friendName}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        )}
+      </View>
     </View>
   );
 };
@@ -91,18 +107,23 @@ const style = StyleSheet.create({
   },
   homePage: {
     padding: 10,
-    // backgroundColor:"lightgray"
+    flex: 1,
   },
   friend_card: {
-    backgroundColor: "blue",
-    paddingVertical: 10,
+    backgroundColor: "lightgreen",
+    paddingVertical: 15,
     borderRadius: 4,
+    marginBottom: 3,
   },
   friend_card_text: {
-    color: "white",
     fontWeight: "600",
     textAlign: "center",
-    fontSize: 22,
+    fontSize: 18,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
