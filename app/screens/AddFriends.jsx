@@ -96,7 +96,7 @@ const AddFriends = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 28,
+    // marginTop: 28,
   },
   header: {
     flexDirection: "row",

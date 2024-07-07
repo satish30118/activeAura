@@ -11,35 +11,50 @@ import {
 import {
   DrawerContentScrollView,
   DrawerItemList,
+  DrawerActions,
 } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useAuth } from "../contexts/authContext";
-
-const shareApp = async () => {
-  try {
-    const result = await Share.share({
-      message: "Check out this awesome app! [Your App Link Here]",
-    });
-    if (result.action === Share.sharedAction) {
-      if (result.activityType) {
-        // Shared with activity type of result.activityType
-      } else {
-        // Shared
-      }
-    } else if (result.action === Share.dismissedAction) {
-      // Dismissed
-    }
-  } catch (error) {
-    alert(error.message);
-  }
-};
-
-const openSMSForReview = () => {
-  Linking.openURL("sms:7985017186?body=Write your review here...");
-};
+import * as SecureStore from "expo-secure-store";
 
 export default function CustomDrawerContent(props) {
-  const [auth] = useAuth();
+  const [auth, setAuth] = useAuth();
+  const shareApp = async () => {
+    props.navigation.closeDrawer();
+    try {
+      const result = await Share.share({
+        message: "Check out this awesome app! [Your App Link Here]",
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // Shared with activity type of result.activityType
+        } else {
+          // Shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // Dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const openSMSForReview = () => {
+    props.navigation.closeDrawer();
+    Linking.openURL("sms:+917985017186?body=Write your review here...");
+  };
+
+  const handleLogout = async () => {
+    try {
+      await SecureStore.deleteItemAsync("authToken");
+      setAuth({ token: "", user: null });
+      props.navigation.closeDrawer();
+      props.navigation.navigate("LoginScreen");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
@@ -51,7 +66,10 @@ export default function CustomDrawerContent(props) {
       </View>
       <TouchableOpacity
         style={styles.item}
-        onPress={() => alert("comming soon")}
+        onPress={() => {
+          alert("Coming soon");
+          props.navigation.closeDrawer();
+        }}
       >
         <Icon name="gear" size={20} color="#000" />
         <Text style={styles.itemText}>Update Profile</Text>
@@ -67,18 +85,14 @@ export default function CustomDrawerContent(props) {
       <TouchableOpacity
         style={styles.item}
         onPress={() => {
-          alert("Comming soon..");
+          alert("Coming soon..");
+          props.navigation.closeDrawer();
         }}
       >
         <Icon name="lock" size={20} color="#000" />
         <Text style={styles.itemText}>Change Password</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.item}
-        onPress={() => {
-          alert("Comming soon..");
-        }}
-      >
+      <TouchableOpacity style={styles.item} onPress={handleLogout}>
         <Icon name="sign-out" size={20} color="#000" />
         <Text style={styles.itemText}>Sign Out</Text>
       </TouchableOpacity>
