@@ -32,13 +32,14 @@ const addFriend = async (req, res) => {
     // Add new friend
     user.friends.push({ friendName, friendId });
     await user.save();
-    if (friendId === req?.user?.id) return;
-    const friend = User.findById(friendId);
-    friend.friends.push({
-      friendName: user?.name,
-      friendId: req?.user?.id,
-    });
-    await friend();
+    if (friendId != req?.user?.id) {
+      const friend = User.findById(friendId);
+      friend.friends.push({
+        friendName: user?.name,
+        friendId: req?.user?.id,
+      });
+      await friend.save();
+    }
 
     res.status(200).json({
       success: true,
