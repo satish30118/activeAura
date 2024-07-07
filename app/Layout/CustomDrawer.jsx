@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Share,
   Linking,
+  Image,
 } from "react-native";
 import {
   DrawerContentScrollView,
@@ -60,7 +61,11 @@ export default function CustomDrawerContent(props) {
       <DrawerItemList {...props} />
       <View style={styles.header}>
         <View style={styles.userAvtar}>
-          <Icon name="user" size={65} color="#000" />
+          {/* <Icon name="user" size={65} color="#000" /> */}
+          <Image
+            source={require("../assets/img/profilepic.jpg")}
+            style={{ height: 70, width: 70, borderRadius:50 }}
+          />
         </View>
         <Text style={styles.headerText}>{auth?.user?.name}</Text>
       </View>

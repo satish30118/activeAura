@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
       }
     };
     loadToken();
-  }, [auth?.token]);
+  }, []);
 
   useEffect(() => {
     if (auth?.token) {
