@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 const Register = async (req, res) => {
   const { name, mobile, password } = req.body;
   const JWT_SECRET = process.env.JWT_SECRET;
-  if(!JWT_SECRET){
-    console.log("No JWT_SECRET")
+  if (!JWT_SECRET) {
+    console.log("No JWT_SECRET");
   }
 
   try {
@@ -31,6 +31,7 @@ const Register = async (req, res) => {
     const token = jwt.sign(payload, JWT_SECRET, {
       expiresIn: "365d",
     });
+    newUser.password = "";
 
     res.status(201).json({
       success: true,
@@ -47,8 +48,8 @@ const Register = async (req, res) => {
 const Login = async (req, res) => {
   const { mobile, password } = req.body;
   const JWT_SECRET = process.env.JWT_SECRET;
-  if(!JWT_SECRET){
-    console.log("No JWT_SECRET")
+  if (!JWT_SECRET) {
+    console.log("No JWT_SECRET");
   }
   try {
     // Find user by mobile number
@@ -83,7 +84,7 @@ const Login = async (req, res) => {
     res
       .status(200)
       .json({ success: true, message: "Login Success", token, details: user });
-    console.log(user);
+  
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
