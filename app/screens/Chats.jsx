@@ -35,6 +35,7 @@ const Chats = ({ navigation, route }) => {
     socket.on("connect", () => {
       console.log("Connected to socket server");
     });
+    socket.emit('join', auth?.user?._id);
 
     socket.on("disconnect", () => {
       console.log("Disconnected from socket server");

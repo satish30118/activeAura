@@ -1,32 +1,36 @@
 const socketIO = require("socket.io");
 const Message = require("../model/MessageModel");
+const User = require("../model/UserModel");
 
 const socketSetup = (server) => {
-  const io = socketIO(server, {
-    pingTimeout: 60000, // Increase timeout
-    pingInterval: 25000, // Set ping interval
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"],
-    },
-  });
+  const io = socketIO(server);
+  const onlineUsers = new Map();
 
   io.on("connection", (socket) => {
-    console.log("A user connected");
+    console.log("A user connected with id: ", socket);
+
+    socket.on("join", (userId) => {
+      onlineUsers.set(userId, socket.id);
+      console.log(onlineUsers);
+    });
 
     socket.on("sendMessage", async (data) => {
-      console.log("Message received: ", data);
-
       const { senderId, receiverId, content } = data;
 
       try {
-        const message = await new Message({
+        const message = new Message({
           senderId,
           receiverId,
           content,
-        }).save();
+        });
 
-        io.emit("receiveMessage", message);
+        await message.save();
+
+        if (onlineUsers.has(receiverId)) {
+          io.to(onlineUsers.get(receiverId)).emit("receiveMessage", message);
+        } else {
+          console.log(`You have a new message from ${senderId}: ${content}`);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -34,6 +38,11 @@ const socketSetup = (server) => {
 
     socket.on("disconnect", () => {
       console.log("User disconnected");
+      onlineUsers.forEach((socketId, userId) => {
+        if (socketId === socket.id) {
+          onlineUsers.delete(userId);
+        }
+      });
     });
   });
 
