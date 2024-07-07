@@ -15,6 +15,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { useAuth } from "../contexts/authContext";
 import axios from "axios";
 
+let socket;
 const Chats = ({ navigation, route }) => {
   const [auth] = useAuth();
   const [message, setMessage] = useState("");
@@ -23,7 +24,7 @@ const Chats = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchChats();
-    const socket = io(APP_API, {
+    socket = io(APP_API, {
       transports: ["websocket"],
       jsonp: false,
       reconnectionAttempts: 5,

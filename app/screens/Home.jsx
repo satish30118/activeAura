@@ -21,7 +21,7 @@ const Home = ({ navigation }) => {
       const { data } = await axios.get(`/api/v1/user/get-friends`);
       setLoading(false);
       setFriends(data?.details);
-      console.log(data)
+      console.log(data);
     } catch (error) {
       console.log(error);
       setLoading(false);

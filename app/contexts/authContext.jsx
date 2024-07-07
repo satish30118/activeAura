@@ -5,7 +5,7 @@ const AuthContext = createContext();
 import { APP_API } from "@env";
 
 const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({ user: null, token: "myself token" });
+  const [auth, setAuth] = useState({ user: null, token: "" });
 
   useEffect(() => {
     const loadToken = async () => {

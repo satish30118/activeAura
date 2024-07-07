@@ -27,7 +27,7 @@ const AddFriends = ({ navigation }) => {
       }
     } catch (error) {
       setLoading(false);
-      console.log("Error in add frd: " , error);
+      console.log("Error in find frd: " , error);
     }
   };
 

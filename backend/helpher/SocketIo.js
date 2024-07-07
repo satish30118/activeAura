@@ -26,7 +26,7 @@ const socketSetup = (server) => {
           content,
         }).save();
 
-        io.to(receiverId).emit("receiveMessage", message);
+        io.emit("receiveMessage", message);
       } catch (error) {
         console.error(error);
       }

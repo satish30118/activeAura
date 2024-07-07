@@ -21,6 +21,7 @@ const addFriend = async (req, res) => {
     const friendExists = user.friends.some(
       (friend) => friend.friendId === friendId
     );
+
     if (friendExists) {
       return res.status(203).json({
         success: false,
@@ -29,11 +30,15 @@ const addFriend = async (req, res) => {
     }
 
     // Add new friend
-    await user.friends.push({ friendName, friendId }).save();
-    await User.findById(friendId).friends.push({
+    user.friends.push({ friendName, friendId });
+    await user.save();
+    if (friendId === req?.user?.id) return;
+    const friend = User.findById(friendId);
+    friend.friends.push({
       friendName: user?.name,
       friendId: req?.user?.id,
     });
+    await friend();
 
     res.status(200).json({
       success: true,
