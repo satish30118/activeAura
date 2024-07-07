@@ -21,6 +21,7 @@ const Home = ({ navigation }) => {
       const { data } = await axios.get(`/api/v1/user/get-friends`);
       setLoading(false);
       setFriends(data?.details);
+      console.log(data)
     } catch (error) {
       console.log(error.message);
       setLoading(false);
@@ -57,7 +58,7 @@ const Home = ({ navigation }) => {
         ) : (
           <FlatList
             data={friends}
-            keyExtractor={(item) => item.friendId}
+            keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() =>

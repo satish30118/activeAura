@@ -16,6 +16,12 @@ const addFriend = async (req, res) => {
   try {
     const { friendName, friendId } = req.body;
     const user = await User.findById(req?.user?.id);
+    if (user.friends.includes({ friendName, friendId })) {
+      return res.json({
+        success: false,
+        message: "Friend Already Added",
+      });
+    }
     user.friends.push({ friendName, friendId });
     res.status(200).json({
       success: true,
