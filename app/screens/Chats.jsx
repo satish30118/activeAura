@@ -20,11 +20,10 @@ const Chats = ({ navigation, route }) => {
   const { name, id } = route.params;
 
   useEffect(() => {
-    // Fetch initial chats from backend or socket server
     fetchChats();
 
     // Listen for new messages from socket server
-    socket.on("newMessage", (newMessage) => {
+    socket.on("receiveMessage", (newMessage) => {
       setChats((prevChats) => [...prevChats, newMessage]);
     });
 
@@ -47,15 +46,13 @@ const Chats = ({ navigation, route }) => {
     if (message.trim() === "") return;
 
     // Emit message to socket server
-    socket.emit("sendMessage", { sender: "user", message });
+    socket.emit("sendMessage", { receiverId: id, content: message });
 
     // Update local UI
     setChats((prevChats) => [
       ...prevChats,
       { id: prevChats.length + 1, sender: "user", message },
     ]);
-
-    // Clear message input
     setMessage("");
   };
 

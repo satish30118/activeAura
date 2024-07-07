@@ -1,9 +1,13 @@
 const express = require("express");
+const http = require("http")
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const messageRoute = require("./routes/messageRoute");
+const socketSetup = require("./helpher/SocketIo");
 require("dotenv").config();
 const app = express();
+const server = http.createServer(app);
+const io = socketSetup(server);
 // MongoDB Connection
 require("./connectdb/db");
 
@@ -21,4 +25,4 @@ app.get("/", (req, res) => {
 
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server started on port ${PORT}`));

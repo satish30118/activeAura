@@ -1,10 +1,11 @@
 const Message = require("../model/MessageModel");
 
 const SendMessage = async (req, res) => {
-  const { sender, receiver, content } = req.body;
+  const { receiverId, content } = req.body;
+  const senderId = req.user.id;
 
   try {
-    const newMessage = new Message({ sender, receiver, content });
+    const newMessage = new Message({ senderId, receiverId, content });
     await newMessage.save();
 
     res.status(201).json({
@@ -19,15 +20,18 @@ const SendMessage = async (req, res) => {
 };
 
 const getMessage = async (req, res) => {
-  const { senderId, receiverId } = useParams;
+  const { receiverId } = useParams;
   try {
-    const messages = await Message.find()
-      .populate("sender", senderId)
-      .populate("receiver", receiverId);
-    res.json(messages);
+    const messages = await Message.find({
+      $or: [
+        { senderId, receiverId },
+        { senderId: receiverId, receiverId: senderId },
+      ],
+    }).sort("timestamp");
+    res.json({ success: true, message: "Message found", details: messages });
   } catch (error) {
     console.error(error);
-    res.status(500).json({success: false, message: "Server error" });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
