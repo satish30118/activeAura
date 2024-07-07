@@ -25,8 +25,17 @@ const Chats = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchChats();
+    socket.on("connect", () => {
+      console.log("Connected to socket server");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from socket server");
+    });
+
     socket.on("receiveMessage", (newMessage) => {
       setChats((prevChats) => [...prevChats, newMessage]);
+      console.log("Received message: ", newMessage);
     });
 
     return () => {
@@ -47,14 +56,12 @@ const Chats = ({ navigation, route }) => {
   const sendMessage = () => {
     if (message.trim() === "") return;
 
-    // Emit message to socket server
     socket.emit("sendMessage", {
       senderId: auth?.user?._id,
       receiverId: id,
       content: message,
     });
 
-    // Update local UI
     setChats((prevChats) => [
       ...prevChats,
       { senderId: auth?.user?._id, receiverId: id, content: message },

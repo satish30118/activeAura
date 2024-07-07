@@ -1,7 +1,6 @@
 const socketIO = require('socket.io');
 const Message = require('../model/MessageModel');
 
-
 const socketSetup = (server) => {
   const io = socketIO(server);
 
@@ -9,8 +8,9 @@ const socketSetup = (server) => {
     console.log('A user connected');
 
     socket.on('sendMessage', async (data) => {
-      const { receiverId, content } = data;
-      const senderId = req.user.id;
+      console.log('Message received: ', data); 
+
+      const { senderId, receiverId, content } = data;
 
       try {
         const message = new Message({
@@ -20,7 +20,7 @@ const socketSetup = (server) => {
         });
 
         await message.save();
-        io.to(receiverId).emit('receiveMessage', message);
+        io.emit('receiveMessage', message); // Changed from io.to(receiverId).emit to io.emit for testing
       } catch (error) {
         console.error(error);
       }

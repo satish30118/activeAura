@@ -1,13 +1,15 @@
 const express = require("express");
-const http = require("http")
+const http = require("http");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const messageRoute = require("./routes/messageRoute");
 const socketSetup = require("./helpher/SocketIo");
 require("dotenv").config();
+
 const app = express();
 const server = http.createServer(app);
 const io = socketSetup(server);
+
 // MongoDB Connection
 require("./connectdb/db");
 
