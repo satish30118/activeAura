@@ -1,5 +1,6 @@
 const express = require("express");
 const http = require("http");
+const cors = require("cors");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const messageRoute = require("./routes/messageRoute");
@@ -14,6 +15,7 @@ const io = socketSetup(server);
 require("./connectdb/db");
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 
 // Routes
