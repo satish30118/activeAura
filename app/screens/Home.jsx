@@ -58,7 +58,7 @@ const Home = ({ navigation }) => {
         ) : (
           <FlatList
             data={friends}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item.friendId}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() =>

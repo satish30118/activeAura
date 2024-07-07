@@ -15,8 +15,6 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { useAuth } from "../contexts/authContext";
 import axios from "axios";
 
-const socket = io(APP_API);
-
 const Chats = ({ navigation, route }) => {
   const [auth] = useAuth();
   const [message, setMessage] = useState("");
@@ -25,6 +23,14 @@ const Chats = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchChats();
+    const socket = io(APP_API, {
+      transports: ["websocket"],
+      jsonp: false,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      pingTimeout: 60000, // Increase timeout
+      pingInterval: 25000, // Set ping interval
+    });
     socket.on("connect", () => {
       console.log("Connected to socket server");
     });
@@ -62,10 +68,10 @@ const Chats = ({ navigation, route }) => {
       content: message,
     });
 
-    setChats((prevChats) => [
-      ...prevChats,
-      { senderId: auth?.user?._id, receiverId: id, content: message },
-    ]);
+    // setChats((prevChats) => [
+    //   ...prevChats,
+    //   { senderId: auth?.user?._id, receiverId: id, content: message },
+    // ]);
     setMessage("");
   };
 
@@ -77,7 +83,7 @@ const Chats = ({ navigation, route }) => {
           alignSelf:
             item.senderId === auth?.user?._id ? "flex-end" : "flex-start",
           backgroundColor:
-            item.senderId === auth?.user?._id ? "#b2e5ff" : "#e5e5e5",
+            item.senderId === auth?.user?._id ? "#b2e5ff" : "lightgreen",
         },
       ]}
     >

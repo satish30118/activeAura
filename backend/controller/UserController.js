@@ -16,23 +16,30 @@ const addFriend = async (req, res) => {
   try {
     const { friendName, friendId } = req.body;
     const user = await User.findById(req?.user?.id);
-    if (user.friends.includes({ friendName, friendId })) {
-      return res.json({
+
+    // Check if friend already exists
+    const friendExists = user.friends.some(friend => friend.friendId === friendId);
+    if (friendExists) {
+      return res.status(203).json({
         success: false,
         message: "Friend Already Added",
       });
     }
+
+    // Add new friend
     user.friends.push({ friendName, friendId });
+    await user.save();
+
     res.status(200).json({
       success: true,
       message: "Friend Added Successfully",
     });
-    user.save();
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 const searchUsers = async (req, res) => {
   try {
