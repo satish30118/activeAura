@@ -32,7 +32,7 @@ const Register = async (req, res) => {
       success: true,
       message: "User registered successfully",
       token,
-      details: newUser
+      details: newUser,
     });
   } catch (error) {
     console.error(error);
@@ -45,7 +45,7 @@ const Login = async (req, res) => {
 
   try {
     // Find user by mobile number
-    const user = await User.findOne({ mobile });
+    let user = await User.findOne({ mobile });
     if (!user) {
       return res
         .status(404)
@@ -72,10 +72,11 @@ const Login = async (req, res) => {
       expiresIn: "365d",
     });
 
-    user = user.password = "";
+    user.password = "";
     res
       .status(200)
       .json({ success: true, message: "Login Success", token, details: user });
+    console.log(user);
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });

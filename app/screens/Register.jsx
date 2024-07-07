@@ -35,9 +35,12 @@ const Register = ({ navigation }) => {
       });
       setLoading(false);
       alert(data.message);
-      // console.log(data)
-      await SecureStore.getItemAsync("authToken", data);
-      setAuth({ ...auth, token: data?.token, user: data?.details });
+      if (data?.success) {
+        navigation.navigate("MainScreen");
+        // Store token securely
+        await SecureStore.setItemAsync("authToken", data);
+        setAuth({ ...auth, token: data?.token, user: data?.details });
+      }
     } catch (error) {
       console.log(error.message);
       setLoading(false);
