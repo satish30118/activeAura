@@ -40,7 +40,7 @@ const searchUsers = async (req, res) => {
     const user = await User.aggregate([
       {
         $search: {
-          index: "UserSearch",
+          index: "frdSearch",
           text: {
             query: query,
             path: "name",

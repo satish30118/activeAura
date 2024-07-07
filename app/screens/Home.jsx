@@ -23,7 +23,7 @@ const Home = ({ navigation }) => {
       setFriends(data?.details);
       console.log(data)
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       setLoading(false);
     }
   };

@@ -21,12 +21,13 @@ const AddFriends = ({ navigation }) => {
       setLoading(true);
       const { data } = await axios.get(`api/v1/user/search-users/${input}`);
       setLoading(false);
+      console.log(data)
       if (data?.success) {
         setUsers(data?.details);
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.log("Error in add frd: " , error);
     }
   };
 
