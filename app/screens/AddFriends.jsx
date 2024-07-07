@@ -12,11 +12,11 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 const AddFriends = () => {
   const [users, setUsers] = useState([]);
-  const getUsers = async (e) => {
+  const getUsers = async (input) => {
     try {
       setUsers([]);
       const { data } = await axios.get(
-        `api/v1/user/search-user/${e.target.value}`
+        `api/v1/user/search-users/${input}`
       );
       console.log(data);
       if (data?.success) {
@@ -42,7 +42,7 @@ const AddFriends = () => {
         <TextInput
           placeholder="Enter Friend Name"
           style={style.textInput}
-          onChange={getUsers}
+          onChangeText={getUsers}
           placeholderTextColor={"black"}
         />
         <FlatList

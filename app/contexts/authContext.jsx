@@ -12,7 +12,8 @@ const AuthProvider = ({ children }) => {
       try {
         const userData = await SecureStore.getItemAsync("authToken");
         if (userData) {
-          setAuth({ user: userData?.details, token: userData?.token });
+          const parsedData = JSON.parse(userData)
+          setAuth({ user: parsedData?.details, token: parsedData?.token });
         }
       } catch (error) {
         console.error("Failed to load the token", error);
