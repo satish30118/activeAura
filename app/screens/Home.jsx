@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [friends, setFriends] = useState([]);
 
@@ -36,8 +36,8 @@ const Home = ({navigation}) => {
     <View style={style.container}>
       <View style={style.header}>
         <TouchableOpacity>
-          <Text>
-            <Icon name="user" size={23} />
+          <Text style={{ marginLeft: 10 }}>
+            <Icon name="bars" size={24} />
           </Text>
         </TouchableOpacity>
         <Text style={style.headerText}>
@@ -53,7 +53,7 @@ const Home = ({navigation}) => {
         )}
       />
         <PostCard /> */}
-        <TouchableOpacity onPress={()=> navigation.navigate("ChatScreen")}>
+        <TouchableOpacity onPress={() => navigation.navigate("ChatScreen")}>
           <View style={style.friend_card}>
             <Text style={style.friend_card_text}>Satish</Text>
           </View>

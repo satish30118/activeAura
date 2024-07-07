@@ -30,10 +30,14 @@ const AddFriends = ({ navigation }) => {
     }
   };
 
-  const handleAddFriend = async(name, id) => {
+  const handleAddFriend = async (name, id) => {
     navigation.navigate("ChatScreen", { name, id });
     try {
-      const { data } = await axios.post(`api/v1/user/add-friend`);
+      const { data } = await axios.post(`api/v1/user/add-friend`, {
+        friendName: name,
+        friendId: id,
+      });
+      console.log(data)
     } catch (error) {
       console.log(error);
     }
