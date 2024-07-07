@@ -1,15 +1,18 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "../Layout/HomeScreen";
+import CustomDrawerContent from "../Layout/CustomDrawer";
 
 const Drawer = createDrawerNavigator();
 
 const AppDrawer = () => {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+    >
       <Drawer.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{ headerShown: false }}
+        options={{ drawerLabel: () => null, headerShown: false, title: "" }}
       />
     </Drawer.Navigator>
   );

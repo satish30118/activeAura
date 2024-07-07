@@ -28,13 +28,12 @@ const Register = async (req, res) => {
       expiresIn: "365d",
     });
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "User registered successfully",
-        token,
-      });
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully",
+      token,
+      details: newUser
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -73,7 +72,10 @@ const Login = async (req, res) => {
       expiresIn: "365d",
     });
 
-    res.status(200).json({ success: true, message: "Login Success", token });
+    user = user.password = "";
+    res
+      .status(200)
+      .json({ success: true, message: "Login Success", token, details: user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });

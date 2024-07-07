@@ -5,21 +5,21 @@ const AuthContext = createContext();
 import { APP_API } from "@env";
 
 const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({ token: "myself token" });
+  const [auth, setAuth] = useState({ user: null, token: "myself token" });
 
   useEffect(() => {
     const loadToken = async () => {
       try {
         const userData = await SecureStore.getItemAsync("authToken");
         if (userData) {
-          setAuth({ token: userData });
+          setAuth({ user: userData?.details, token: userData?.token });
         }
       } catch (error) {
         console.error("Failed to load the token", error);
       }
     };
     loadToken();
-  }, []);
+  }, [auth?.token]);
 
   useEffect(() => {
     if (auth?.token) {

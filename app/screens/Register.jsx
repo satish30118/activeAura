@@ -36,8 +36,8 @@ const Register = ({ navigation }) => {
       setLoading(false);
       alert(data.message);
       // console.log(data)
-      await SecureStore.getItemAsync("authToken", data?.token);
-      setAuth({ ...auth, token: data?.token });
+      await SecureStore.getItemAsync("authToken", data);
+      setAuth({ ...auth, token: data?.token, user: data?.details });
     } catch (error) {
       console.log(error.message);
       setLoading(false);
@@ -91,7 +91,7 @@ const Register = ({ navigation }) => {
         }}
       >
         Have an Account{" "}
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
           <Text style={{ color: "red", fontWeight: "bold", fontSize: 20 }}>
             Login
           </Text>

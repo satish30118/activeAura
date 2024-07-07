@@ -12,7 +12,6 @@ const getFriends = async (req, res) => {
   }
 };
 
-
 const addFriend = async (req, res) => {
   try {
     const { friendName, friendId } = req.body;
@@ -27,4 +26,17 @@ const addFriend = async (req, res) => {
   }
 };
 
-module.exports = { getFriends, addFriend };
+const searchUsers = async (req, res) => {
+  try {
+    const { friendName, friendId } = req.body;
+    const user = await User.findById(req?.user?.id);
+    user.friends.push({ friendName, friendId });
+    res
+      .status(200)
+      .json({ success: true, message: "Friend Added Successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+module.exports = { getFriends, addFriend, searchUsers };
