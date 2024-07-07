@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -5,67 +6,99 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
 import axios from "axios";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-const AddFriends = () => {
+const AddFriends = ({ navigation }) => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const getUsers = async (input) => {
     try {
       setUsers([]);
-      const { data } = await axios.get(
-        `api/v1/user/search-users/${input}`
-      );
-      console.log(data);
+      setLoading(true);
+      const { data } = await axios.get(`api/v1/user/search-users/${input}`);
+      setLoading(false);
       if (data?.success) {
         setUsers(data?.details);
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
+
+  const handleAddFriend = async(name, id) => {
+    navigation.navigate("ChatScreen", { name, id });
+    try {
+      const { data } = await axios.post(`api/v1/user/add-friend`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <View style={style.container}>
-      <View style={style.header}>
+    <View style={styles.container}>
+      <View style={styles.header}>
         <TouchableOpacity>
           <Text>
             <Icon name="user" size={23} />
           </Text>
         </TouchableOpacity>
-        <Text style={style.headerText}>
+        <Text style={styles.headerText}>
           Active <Text style={{ color: "red" }}>Aura</Text>{" "}
         </Text>
       </View>
-      <View style={style.addfriendPage}>
+      <View style={styles.addfriendPage}>
         <TextInput
           placeholder="Enter Friend Name"
-          style={style.textInput}
+          style={styles.textInput}
           onChangeText={getUsers}
           placeholderTextColor={"black"}
         />
-        <FlatList
-          data={users}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <Text>{item.name}</Text>}
-        />
+        {loading ? (
+          <View style={styles.centered}>
+            <ActivityIndicator size="large" color="blue" />
+          </View>
+        ) : users.length === 0 ? (
+          <View style={styles.centered}>
+            <Text style={{ fontSize: 18, fontWeight: "900" }}>
+              No User Found
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={users}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.foundUser}
+                onPress={() => handleAddFriend(item.name, item._id)} // Corrected onPress usage
+              >
+                <Text style={{ textAlign: "center", fontWeight: "bold" }}>
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </View>
     </View>
   );
 };
-const style = StyleSheet.create({
+
+const styles = StyleSheet.create({
   container: {
-    marginTop: 28,
     flex: 1,
+    marginTop: 28,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "white",
     padding: 10,
-    // borderBottomColor: "lightgray",
-    // borderBottomWidth: 1,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 20 },
     shadowOpacity: 0.8,
@@ -88,8 +121,24 @@ const style = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 5,
     borderColor: "darkblue",
-    padding: 10,
-    marginBottom: 20,
+    fontSize: 18,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  foundUser: {
+    backgroundColor: "lightgray",
+    padding: 15,
+    margin: 2,
+    fontSize: 17,
+    fontWeight: "bold",
+    textAlign: "center",
+    borderRadius: 3,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
+
 export default AddFriends;
