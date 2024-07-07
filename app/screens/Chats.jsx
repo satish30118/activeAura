@@ -18,7 +18,7 @@ import axios from "axios";
 const socket = io(APP_API);
 
 const Chats = ({ navigation, route }) => {
-  const [auth] =useAuth()
+  const [auth] = useAuth();
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
   const { name, id } = route.params;
@@ -30,7 +30,7 @@ const Chats = ({ navigation, route }) => {
     });
 
     return () => {
-      socket.disconnect(); 
+      socket.disconnect();
     };
   }, []);
 
@@ -38,7 +38,7 @@ const Chats = ({ navigation, route }) => {
     try {
       const { data } = await axios.get(`/api/v1/message/get-message/${id}`);
       setChats(data.details);
-      console.log(data)
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -48,13 +48,17 @@ const Chats = ({ navigation, route }) => {
     if (message.trim() === "") return;
 
     // Emit message to socket server
-    socket.emit("sendMessage", {senderId : auth?.user?._id, receiverId : id, content : message });
+    socket.emit("sendMessage", {
+      senderId: auth?.user?._id,
+      receiverId: id,
+      content: message,
+    });
 
-    // // Update local UI
-    // setChats((prevChats) => [
-    //   ...prevChats,
-    //   { id: prevChats.length + 1, sender: "user", message },
-    // ]);
+    // Update local UI
+    setChats((prevChats) => [
+      ...prevChats,
+      { senderId: auth?.user?._id, receiverId: id, content: message },
+    ]);
     setMessage("");
   };
 
@@ -63,12 +67,14 @@ const Chats = ({ navigation, route }) => {
       style={[
         styles.chatBubble,
         {
-          alignSelf: item.senderId === auth?.user?._id ? "flex-end" : "flex-start",
-          backgroundColor: item.senderId === auth?.user?._id  ? "#b2e5ff" : "#e5e5e5",
+          alignSelf:
+            item.senderId === auth?.user?._id ? "flex-end" : "flex-start",
+          backgroundColor:
+            item.senderId === auth?.user?._id ? "#b2e5ff" : "#e5e5e5",
         },
       ]}
     >
-      <Text style={styles.chatText}>{item.message}</Text>
+      <Text style={styles.chatText}>{item.content}</Text>
     </View>
   );
 
@@ -82,7 +88,7 @@ const Chats = ({ navigation, route }) => {
 
       <FlatList
         data={chats}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id}
         renderItem={renderChatItem}
         contentContainerStyle={styles.chatContainer}
       />

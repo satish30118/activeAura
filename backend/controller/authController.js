@@ -56,7 +56,7 @@ const Login = async (req, res) => {
     let user = await User.findOne({ mobile });
     if (!user) {
       return res
-        .status(404)
+        .status(203)
         .json({ success: false, message: "Invalid credentials" });
     }
 
@@ -64,7 +64,7 @@ const Login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
-        .status(401)
+        .status(203)
         .json({ success: false, message: "Invalid credentials" });
     }
 
