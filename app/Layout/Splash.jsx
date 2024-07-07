@@ -6,7 +6,7 @@ const Splash = ({ navigation }) => {
   const [auth] = useAuth()
   useEffect(() => {
     setTimeout(() => {
-      if (auth?.token) {
+      if (!auth?.token) {
         navigation.navigate("MainScreen");
       } else {
         navigation.navigate("LoginScreen");

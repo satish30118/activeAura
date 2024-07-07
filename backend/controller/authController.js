@@ -4,6 +4,10 @@ const jwt = require("jsonwebtoken");
 
 const Register = async (req, res) => {
   const { name, mobile, password } = req.body;
+  const JWT_SECRET = process.env.JWT_SECRET;
+  if(!JWT_SECRET){
+    console.log("No JWT_SECRET")
+  }
 
   try {
     // Check if user already exists
@@ -24,7 +28,7 @@ const Register = async (req, res) => {
       },
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const token = jwt.sign(payload, JWT_SECRET, {
       expiresIn: "365d",
     });
 
@@ -42,7 +46,10 @@ const Register = async (req, res) => {
 
 const Login = async (req, res) => {
   const { mobile, password } = req.body;
-
+  const JWT_SECRET = process.env.JWT_SECRET;
+  if(!JWT_SECRET){
+    console.log("No JWT_SECRET")
+  }
   try {
     // Find user by mobile number
     let user = await User.findOne({ mobile });
@@ -68,7 +75,7 @@ const Login = async (req, res) => {
       },
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const token = jwt.sign(payload, JWT_SECRET, {
       expiresIn: "365d",
     });
 

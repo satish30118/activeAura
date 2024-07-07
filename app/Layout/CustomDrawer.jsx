@@ -13,6 +13,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { useAuth } from "../contexts/authContext";
 
 const shareApp = async () => {
   try {
@@ -38,6 +39,7 @@ const openSMSForReview = () => {
 };
 
 export default function CustomDrawerContent(props) {
+  const [auth] = useAuth();
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
@@ -45,7 +47,7 @@ export default function CustomDrawerContent(props) {
         <View style={styles.userAvtar}>
           <Icon name="user" size={65} color="#000" />
         </View>
-        <Text style={styles.headerText}>Satish Maurya</Text>
+        <Text style={styles.headerText}>{auth?.user?.name}</Text>
       </View>
       <TouchableOpacity
         style={styles.item}
