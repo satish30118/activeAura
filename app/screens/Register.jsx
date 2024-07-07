@@ -38,7 +38,7 @@ const Register = ({ navigation }) => {
       if (data?.success) {
         navigation.navigate("MainScreen");
         // Store token securely
-        await SecureStore.setItemAsync("authToken", data);
+        await SecureStore.setItemAsync("authToken", JSON.stringify(data));
         setAuth({ ...auth, token: data?.token, user: data?.details });
       }
     } catch (error) {

@@ -20,7 +20,8 @@ const SendMessage = async (req, res) => {
 };
 
 const getMessage = async (req, res) => {
-  const { receiverId } = params;
+  const { receiverId } = req.params;
+  const senderId = req.user.id;
   try {
     const messages = await Message.find({
       $or: [

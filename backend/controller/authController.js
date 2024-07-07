@@ -14,7 +14,7 @@ const Register = async (req, res) => {
     let existingUser = await User.findOne({ mobile });
     if (existingUser) {
       return res
-        .status(400)
+        .status(203)
         .json({ success: false, message: "User already exists" });
     }
 

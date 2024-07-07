@@ -37,7 +37,7 @@ const AddFriends = ({ navigation }) => {
         friendName: name,
         friendId: id,
       });
-      // console.log(data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
