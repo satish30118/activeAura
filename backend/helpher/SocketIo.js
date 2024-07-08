@@ -31,6 +31,10 @@ const socketSetup = (server) => {
           io.to(onlineUsers.get(senderId)).emit("receiveMessage", message);
         } else {
           console.log(`You have a new message from ${senderId}: ${content}`);
+          const notification = await Notification({
+            senderId,
+            receiverId,
+          }).save();
         }
       } catch (error) {
         console.error(error);

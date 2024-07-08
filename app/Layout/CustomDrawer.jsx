@@ -24,7 +24,7 @@ export default function CustomDrawerContent(props) {
     props.navigation.closeDrawer();
     try {
       const result = await Share.share({
-        message: "Check out this awesome app! https://expo.dev/artifacts/eas/v3u54zhqSEXSJ6r975Xbq1.aab",
+        message: "Check out this awesome chat app! Active Aura, https://drive.google.com/drive/folders/1r_1QPlAmetdjb9XEDPkJeRs6hvmfyZay?usp=drive_link",
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

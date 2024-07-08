@@ -5,7 +5,6 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -14,6 +13,7 @@ import axios from "axios";
 const Home = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [friends, setFriends] = useState([]);
+  const [notification, setNotification] = useState([]);
 
   const getFriends = async () => {
     try {
@@ -21,16 +21,46 @@ const Home = ({ navigation }) => {
       const { data } = await axios.get(`/api/v1/user/get-friends`);
       setLoading(false);
       setFriends(data?.details);
-      console.log(data);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
 
+  const getNotification = async () => {
+    try {
+      const { data } = await axios.get(`/api/v1/message/get-notification`);
+      setNotification(data?.details);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getFriends();
+    getNotification();
   }, []);
+
+  const renderFriend = ({ item }) => {
+    const count = notification.filter(n => n.senderId === item.friendId).length;
+
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("ChatScreen", {
+            name: item?.friendName,
+            id: item.friendId,
+          })
+        }
+      >
+        <View style={style.friend_card}>
+          <Text style={style.friend_card_text}>
+            {item?.friendName} ({count} notifications)
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={style.container}>
@@ -59,20 +89,7 @@ const Home = ({ navigation }) => {
           <FlatList
             data={friends}
             keyExtractor={(item) => item.friendId}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("ChatScreen", {
-                    name: item?.friendName,
-                    id: item.friendId,
-                  })
-                }
-              >
-                <View style={style.friend_card}>
-                  <Text style={style.friend_card_text}>{item?.friendName}</Text>
-                </View>
-              </TouchableOpacity>
-            )}
+            renderItem={renderFriend}
           />
         )}
       </View>
@@ -82,7 +99,6 @@ const Home = ({ navigation }) => {
 
 const style = StyleSheet.create({
   container: {
-    // marginTop: 28,
     backgroundColor: "white",
     flex: 1,
   },
@@ -91,8 +107,6 @@ const style = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     padding: 10,
-    // borderBottomColor: "lightgray",
-    // borderBottomWidth: 1,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 20 },
     shadowOpacity: 0.8,
