@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-// import { EXPO_PUBLIC_APP_API } from "@env";
-const EXPO_PUBLIC_APP_API = process.env.EXPO_PUBLIC_APP_API;
+import { EXPO_PUBLIC_APP_API } from "@env";
+// const EXPO_PUBLIC_APP_API = process.env.EXPO_PUBLIC_APP_API;
 
 
 import {

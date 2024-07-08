@@ -2,14 +2,15 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
-// import { EXPO_PUBLIC_APP_API } from "@env";
-const EXPO_PUBLIC_APP_API = process.env.EXPO_PUBLIC_APP_API;
+import { EXPO_PUBLIC_APP_API } from "@env";
+// const EXPO_PUBLIC_APP_API = process.env.EXPO_PUBLIC_APP_API;
 
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({ user: null, token: "" });
 
   useEffect(() => {
     const loadToken = async () => {
+      console.log(EXPO_PUBLIC_APP_API)
       try {
         const userData = await SecureStore.getItemAsync("authToken");
         if (userData) {
