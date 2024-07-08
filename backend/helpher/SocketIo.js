@@ -7,11 +7,11 @@ const socketSetup = (server) => {
   const onlineUsers = new Map();
 
   io.on("connection", (socket) => {
-    console.log("A user connected with id: ", socket);
+    console.log("A user connected with id: ", socket.id);
 
     socket.on("join", (userId) => {
       onlineUsers.set(userId, socket.id);
-      console.log(onlineUsers);
+      console.log("All online users: ", onlineUsers);
     });
 
     socket.on("sendMessage", async (data) => {
@@ -28,6 +28,7 @@ const socketSetup = (server) => {
 
         if (onlineUsers.has(receiverId)) {
           io.to(onlineUsers.get(receiverId)).emit("receiveMessage", message);
+          io.to(onlineUsers.get(senderId)).emit("receiveMessage", message);
         } else {
           console.log(`You have a new message from ${senderId}: ${content}`);
         }

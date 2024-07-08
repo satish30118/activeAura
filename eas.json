@@ -10,7 +10,14 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_APP_API" : "https://activeaura-bzwk.onrender.com/"
+      }
+    }
   },
   "submit": {
     "production": {}

@@ -2,7 +2,8 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
-import { APP_API } from "@env";
+// import { EXPO_PUBLIC_APP_API } from "@env";
+const EXPO_PUBLIC_APP_API = process.env.EXPO_PUBLIC_APP_API;
 
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({ user: null, token: "" });
@@ -12,7 +13,7 @@ const AuthProvider = ({ children }) => {
       try {
         const userData = await SecureStore.getItemAsync("authToken");
         if (userData) {
-          const parsedData = JSON.parse(userData)
+          const parsedData = JSON.parse(userData);
           setAuth({ user: parsedData?.details, token: parsedData?.token });
         }
       } catch (error) {
@@ -25,7 +26,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (auth?.token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
-      axios.defaults.baseURL = APP_API;
+      axios.defaults.baseURL = EXPO_PUBLIC_APP_API;
     }
   }, [auth?.token]);
 

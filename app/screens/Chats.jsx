@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { APP_API } from "@env";
+// import { EXPO_PUBLIC_APP_API } from "@env";
+const EXPO_PUBLIC_APP_API = process.env.EXPO_PUBLIC_APP_API;
+
+
 import {
   View,
   Text,
@@ -24,7 +27,7 @@ const Chats = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchChats();
-    socket = io(APP_API, {
+    socket = io(EXPO_PUBLIC_APP_API, {
       transports: ["websocket"],
       jsonp: false,
       reconnectionAttempts: 5,

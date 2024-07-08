@@ -24,7 +24,7 @@ export default function CustomDrawerContent(props) {
     props.navigation.closeDrawer();
     try {
       const result = await Share.share({
-        message: "Check out this awesome app! [Your App Link Here]",
+        message: "Check out this awesome app! https://expo.dev/artifacts/eas/v3u54zhqSEXSJ6r975Xbq1.aab",
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
