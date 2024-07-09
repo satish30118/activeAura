@@ -57,7 +57,7 @@ const deleteNotification = async (req, res) => {
   const { senderId } = req.params;
   const receiverId = req.user.id;
   try {
-    const notification = await Notification.remove({
+    const notification = await Notification.deleteMany({
       senderId,
       receiverId,
     });

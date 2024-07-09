@@ -56,7 +56,7 @@ const Home = ({ navigation }) => {
       >
         <View style={style.friend_card}>
           <Text style={style.friend_card_text}>
-            {item?.friendName} ({count} notifications)
+            {item?.friendName} <Text style={{color:"red"}}>({count})</Text>
           </Text>
         </View>
       </TouchableOpacity>

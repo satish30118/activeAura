@@ -27,6 +27,7 @@ const Chats = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchChats();
+    deleteNotification();
     socket = io(EXPO_PUBLIC_APP_API, {
       transports: ["websocket"],
       jsonp: false,
@@ -64,6 +65,17 @@ const Chats = ({ navigation, route }) => {
     } catch (error) {
       console.log(error);
       setLoading(false);
+    }
+  };
+
+  const deleteNotification = async () => {
+    try {
+      const { data } = await axios.delete(
+        `/api/v1/message/delete-notification/${id}`
+      );
+      console.log(data);
+    } catch (error) {
+      console.log("Error in deleting notification: ", error);
     }
   };
 
