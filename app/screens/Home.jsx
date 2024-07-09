@@ -31,6 +31,7 @@ const Home = ({ navigation }) => {
     try {
       const { data } = await axios.get(`/api/v1/message/get-notification`);
       setNotification(data?.details);
+      console.log(data)
     } catch (error) {
       console.log(error);
     }

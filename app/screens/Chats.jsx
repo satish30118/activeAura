@@ -76,15 +76,15 @@ const Chats = ({ navigation, route }) => {
       content: message,
     });
 
-    setChats((prevChats) => [
-      ...prevChats,
-      {
-        _id: Date.now(),
-        senderId: auth?.user?._id,
-        receiverId: id,
-        content: message,
-      },
-    ]);
+    // setChats((prevChats) => [
+    //   ...prevChats,
+    //   {
+    //     _id: Date.now(),
+    //     senderId: auth?.user?._id,
+    //     receiverId: id,
+    //     content: message,
+    //   },
+    // ]);
     setMessage("");
   };
 

@@ -26,6 +26,7 @@ const socketSetup = (server) => {
         });
 
         await message.save();
+        io.to(onlineUsers.get(senderId)).emit("receiveMessage", message);
 
         if (onlineUsers.has(receiverId)) {
           io.to(onlineUsers.get(receiverId)).emit("receiveMessage", message);

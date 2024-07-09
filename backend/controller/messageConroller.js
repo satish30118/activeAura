@@ -38,7 +38,7 @@ const getMessage = async (req, res) => {
 };
 
 const getNotification = async (req, res) => {
-  const receiverId = req.user.id;
+  const receiverId = req?.user?.id;
   try {
     const notification = await Notification.find({
       receiverId,

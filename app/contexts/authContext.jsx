@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
       }
     };
     loadToken();
-  }, []);
+  }, [auth?.token]);
 
 
   return (
