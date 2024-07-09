@@ -54,22 +54,29 @@ const addFriend = async (req, res) => {
 const searchUsers = async (req, res) => {
   try {
     const { query } = req.params;
-    const user = await User.aggregate([
-      {
-        $search: {
-          index: "frdSearch",
-          text: {
-            query: query,
-            path: "name",
-          },
-        },
+    // const user = await User.aggregate([
+    //   {
+    //     $search: {
+    //       index: "frdSearch",
+    //       text: {
+    //         query: query,
+    //         path: "name",
+    //       },
+    //     },
+    //   },
+    //   {
+    //     $project: {
+    //       name: 1,
+    //     },
+    //   },
+    // ]);
+
+    const user = await User.find({
+      name: { $regex: query, $options: "i" },
+      $project: {
+        name: 1,
       },
-      {
-        $project: {
-          name: 1,
-        },
-      },
-    ]);
+    });
 
     res
       .status(200)
