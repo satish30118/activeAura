@@ -1,6 +1,7 @@
 const socketIO = require("socket.io");
 const Message = require("../model/MessageModel");
 const User = require("../model/UserModel");
+const Notification = require("../model/NotificationModel");
 
 const socketSetup = (server) => {
   const io = socketIO(server);
@@ -28,7 +29,6 @@ const socketSetup = (server) => {
 
         if (onlineUsers.has(receiverId)) {
           io.to(onlineUsers.get(receiverId)).emit("receiveMessage", message);
-          io.to(onlineUsers.get(senderId)).emit("receiveMessage", message);
         } else {
           console.log(`You have a new message from ${senderId}: ${content}`);
           const notification = await Notification({

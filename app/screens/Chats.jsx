@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { EXPO_PUBLIC_APP_API } from "@env";
 // const EXPO_PUBLIC_APP_API = process.env.EXPO_PUBLIC_APP_API;
 
-
 import {
   View,
   Text,
@@ -23,6 +22,7 @@ const Chats = ({ navigation, route }) => {
   const [auth] = useAuth();
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
+  const [loadind, setLoading] = useState(false);
   const { name, id } = route.params;
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const Chats = ({ navigation, route }) => {
     socket.on("connect", () => {
       console.log("Connected to socket server");
     });
-    socket.emit('join', auth?.user?._id);
+    socket.emit("join", auth?.user?._id);
 
     socket.on("disconnect", () => {
       console.log("Disconnected from socket server");
@@ -56,11 +56,14 @@ const Chats = ({ navigation, route }) => {
 
   const fetchChats = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(`/api/v1/message/get-message/${id}`);
       setChats(data.details);
-      console.log(data);
+      setLoading(false);
+      // console.log(data);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -73,10 +76,15 @@ const Chats = ({ navigation, route }) => {
       content: message,
     });
 
-    // setChats((prevChats) => [
-    //   ...prevChats,
-    //   { senderId: auth?.user?._id, receiverId: id, content: message },
-    // ]);
+    setChats((prevChats) => [
+      ...prevChats,
+      {
+        _id: Date.now(),
+        senderId: auth?.user?._id,
+        receiverId: id,
+        content: message,
+      },
+    ]);
     setMessage("");
   };
 

@@ -10,12 +10,14 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const loadToken = async () => {
-      console.log(EXPO_PUBLIC_APP_API)
+      console.log("URL:==> " , EXPO_PUBLIC_APP_API)
+      axios.defaults.baseURL = EXPO_PUBLIC_APP_API;
       try {
         const userData = await SecureStore.getItemAsync("authToken");
         if (userData) {
           const parsedData = JSON.parse(userData);
           setAuth({ user: parsedData?.details, token: parsedData?.token });
+          axios.defaults.headers.common["Authorization"] = `Bearer ${parsedData?.token}`;
         }
       } catch (error) {
         console.error("Failed to load the token", error);
@@ -24,12 +26,6 @@ const AuthProvider = ({ children }) => {
     loadToken();
   }, []);
 
-  useEffect(() => {
-    if (auth?.token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
-      axios.defaults.baseURL = EXPO_PUBLIC_APP_API;
-    }
-  }, [auth?.token]);
 
   return (
     <AuthContext.Provider value={[auth, setAuth]}>
