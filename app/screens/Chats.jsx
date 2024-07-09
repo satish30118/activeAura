@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { EXPO_PUBLIC_APP_API } from "@env";
 // const EXPO_PUBLIC_APP_API = process.env.EXPO_PUBLIC_APP_API;
 
@@ -11,6 +11,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import io from "socket.io-client";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -22,12 +23,12 @@ const Chats = ({ navigation, route }) => {
   const [auth] = useAuth();
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
-  const [loadind, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { name, id } = route.params;
+  const flatListRef = useRef(null);
 
   useEffect(() => {
     fetchChats();
-    deleteNotification();
     socket = io(EXPO_PUBLIC_APP_API, {
       transports: ["websocket"],
       jsonp: false,
@@ -68,17 +69,6 @@ const Chats = ({ navigation, route }) => {
     }
   };
 
-  const deleteNotification = async () => {
-    try {
-      const { data } = await axios.delete(
-        `/api/v1/message/delete-notification/${id}`
-      );
-      console.log(data);
-    } catch (error) {
-      console.log("Error in deleting notification: ", error);
-    }
-  };
-
   const sendMessage = () => {
     if (message.trim() === "") return;
 
@@ -99,6 +89,11 @@ const Chats = ({ navigation, route }) => {
     // ]);
     setMessage("");
   };
+  useEffect(() => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToEnd({ animated: true });
+    }
+  }, [chats]);
 
   const renderChatItem = ({ item }) => (
     <View
@@ -123,13 +118,17 @@ const Chats = ({ navigation, route }) => {
           Chatting With <Text style={{ color: "red" }}>{name}</Text>
         </Text>
       </View>
-
-      <FlatList
-        data={chats}
-        keyExtractor={(item) => item._id}
-        renderItem={renderChatItem}
-        contentContainerStyle={styles.chatContainer}
-      />
+      {loading ? (
+        <ActivityIndicator style={{ flex: 1 }} size={"large"}/>
+      ) : (
+        <FlatList
+          ref={flatListRef}
+          data={chats}
+          keyExtractor={(item) => item._id}
+          renderItem={renderChatItem}
+          contentContainerStyle={styles.chatContainer}
+        />
+      )}
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}

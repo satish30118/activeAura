@@ -31,9 +31,20 @@ const Home = ({ navigation }) => {
     try {
       const { data } = await axios.get(`/api/v1/message/get-notification`);
       setNotification(data?.details);
-      console.log(data)
+      console.log(data);
     } catch (error) {
       console.log(error);
+    }
+  };
+  const deleteNotification = async (id) => {
+    try {
+      const { data } = await axios.delete(
+        `/api/v1/message/delete-notification/${id}`
+      );
+      getNotification()
+      console.log(data);
+    } catch (error) {
+      console.log("Error in deleting notification: ", error);
     }
   };
 
@@ -43,20 +54,23 @@ const Home = ({ navigation }) => {
   }, []);
 
   const renderFriend = ({ item }) => {
-    const count = notification.filter(n => n.senderId === item.friendId).length;
+    const count = notification.filter(
+      (n) => n.senderId === item.friendId
+    ).length;
 
     return (
       <TouchableOpacity
-        onPress={() =>
+        onPress={() => {
+          deleteNotification(item.friendId)
           navigation.navigate("ChatScreen", {
             name: item?.friendName,
             id: item.friendId,
-          })
-        }
+          });
+        }}
       >
         <View style={style.friend_card}>
           <Text style={style.friend_card_text}>
-            {item?.friendName} <Text style={{color:"red"}}>({count})</Text>
+            {item?.friendName} <Text style={{ color: "red" }}>({count})</Text>
           </Text>
         </View>
       </TouchableOpacity>
