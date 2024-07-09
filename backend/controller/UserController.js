@@ -73,9 +73,6 @@ const searchUsers = async (req, res) => {
 
     const user = await User.find({
       name: { $regex: query, $options: "i" },
-      $project: {
-        name: 1,
-      },
     });
 
     res
